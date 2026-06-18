@@ -210,18 +210,31 @@
  margin: auto;
  padding: 1rem;
  }
- .dashboard-header-bar {
- background-color: #FFFFFF;
- border-left: 6px solid #8A05BE;
- padding: 1.25rem 2rem;
- border-radius: 12px;
- box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
- display: flex;
- justify-content: space-between;
- align-items: center;
- width: 100%;
- border: 1px solid #E5E5EA;
- }
+/* Procure por esta classe e garanta que ela tenha flex-wrap para telas menores */
+.dashboard-header-bar {
+    background-color: #FFFFFF;
+    border-left: 6px solid #8A05BE;
+    padding: 1.25rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: 1px solid #E5E5EA;
+    flex-wrap: wrap; /* Evita quebra de layout em telas de notebooks */
+    gap: 1rem;
+}
+
+/* Nova regra cirúrgica para estilizar o título da direita */
+.dashboard-main-title-tag {
+    font-size: 0.875rem; 
+    color: #6E6E73; 
+    font-weight: 700; 
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
  .user-badge-info {
  font-size: 1rem;
  font-weight: 600;
@@ -335,7 +348,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v2</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v3</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -439,14 +452,18 @@
         // ========================================================================= -->
         <div id="dashboardPrincipalContainer" class="dashboard-container">
         
-         <!-- BARRA DE SESSÃO DO OPERADOR -->
-         <div class="dashboard-header-bar">
-         <div class="user-badge-info">
-         Usuario: <span id="sessaoUserTxt">Carregando...</span>
-         Regiao: <span id="sessaoRegiaoTxt">Carregando...</span>
-         </div>
-         <div style="font-size: 0.875rem; color: #6E6E73; font-weight: 700; letter-spacing: 0.5px;">PAINEL VIVO PDC</div>
-         </div>
+        <!-- =========================================================================
+        // 🌟 BARRA DE SESSÃO DO OPERADOR (ATUALIZADA COM O NOVO TÍTULO)
+        // ========================================================================= -->
+        <div class="dashboard-header-bar">
+            <div class="user-badge-info">
+                Usuario: <span id="sessaoUserTxt">Carregando...</span>
+                Regiao: <span id="sessaoRegiaoTxt">Carregando...</span>
+            </div>
+            <!-- ALTERAÇÃO CIRÚRGICA: Título oficial corporativo centralizado -->
+            <div class="dashboard-main-title-tag">PAINEL ADMINISTRATIVO - PASSAGEM DE CARGA</div>
+        </div>
+
         
          <!-- CARD DE MATRIZ DE FILTROS -->
          <div class="dashboard-card-filters">
