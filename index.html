@@ -317,353 +317,124 @@
     </div>
 
     <script>
-        // 🗺️ DICIONÁRIO MESTRE DE REDE (Casado com a arquitetura das suas URLs por estado)
-       // const SCRIPTS_POR_UF = {
-                  // "AC": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "AL": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "AP": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "AM": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "BA": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "CE": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "DF": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "ES": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "GO": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "MA": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "MT": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "MS": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "MG": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "PA": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "PB": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-         //         "PR": "https://script.google.com/macros/s/AKfycbxac2XkNKNqzCgJnH5pGLCu5lcvE67R-u8JJEUIeHuIH_JU7znfVbUEM_GfRAsJAY0a/exec",
-                  // "PE": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "PI": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "RJ": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "RN": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-           //       "RS": "https://script.google.com/macros/s/AKfycbwl5Bd0XsXMk_Yc67kC3ftu94TjtdZudVMtYNHWMLiO5rvh6eYWoiP12cd4l5XQLIaqsw/exec",
-                  // "RO": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "RR": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-             //     "SC": "https://script.google.com/macros/s/AKfycbznwOrJSb9JVwX570_yF2iA5tEuzDdRLXqPKt6IHjp6NGcKO1aGzx1B8saPZsLoBY8sjQ/exec",
-                  // "SP": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "SE": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec",
-                  // "TO": "https://script.google.com/macros/s/AKfycbxeW2tRPFpnompPApN4XxeY2DWnZLoIzmzenf8zEdOXctNgtrw-l71ZLGn6QpTOTZkc/exec" 
-                  // Adicione as demais UFs conforme criar as planilhas/scripts clonados...
-        };
 
-          // ==================================================================
-          // 1. CONFIGURAÇÃO DE ENDPOINT DIRETO DO BANCO DE DADOS
-          // ==================================================================
-          // Cole aqui a URL exata gerada no deploy da sua planilha '1dFDhk-VJ...'
-          const URL_ENDPOINT_ATIVO = "https://script.google.com/macros/s/AKfycbxHZR2mh1FPerYInd2NX6OL1PYQRgTT972VoyoPJIWb3z6FRyrxLZ9PyAYKpr5DaFY-/exec";
-        
-          // Configuração fácil dos domínios corporativos válidos
-          const DOMINIOS_CORPORATIVOS_PERMITIDOS = ["@TELEFONICA", "@ATENTO", "@ACCENTURE"];
-            // ==================================================================
-            // 1. VARIÁVEIS GLOBAIS DE AMBIENTE (SESSÃO ATIVA)
-            // ==================================================================
-            let URL_ENDPOINT_ATIVO = "";
-            let UF_SELECIONADA = ""; // Regra 1: UF salva globalmente na primeira tela
-
-        /**
-         * Fase 1: Valida a região escolhida pelo operador e libera a tela de login
-         */
-
-    /**
-     * Fase 2: Executa a validação e submissão das credenciais via transmissão JSONP
-     */
-    function executarLoginPainel(event) {
-        event.preventDefault();
-        
-        const user = document.getElementById("loginUser").value.trim();
-        const pass = document.getElementById("loginPass").value.trim();
-        const btn = document.getElementById("btnLogin");
-        const spinner = document.getElementById("loginSpinner");
-        const btnText = document.getElementById("btnText");
-
-        if (btn) btn.disabled = true;
-        if (spinner) spinner.style.display = "block";
-        if (btnText) btnText.innerText = "Autenticando...";
-
-        console.log(`🔒 [LOGIN] Enviando credenciais para o cluster ${UF_SELECIONADA}...`);
-
-        const callbackName = "cbLoginPainel_" + Date.now();
-        
-        window[callbackName] = function(resposta) {
-            if (btn) btn.disabled = false;
-            if (spinner) spinner.style.display = "none";
-            if (btnText) btnText.innerText = "Acessar Painel";
-
-            if (resposta && resposta.success) {
-                alert(`🎉 Login autorizado com sucesso para a UF: ${UF_SELECIONADA}!`);
-                console.log("Sessão iniciada:", resposta.dadosUsuario);
-            } else {
-                alert("❌ Erro de Autenticação: " + (resposta.error || "Credenciais inválidas."));
-            }
-
-            delete window[callbackName];
-        };
-
-        const urlCompleta = `${URL_ENDPOINT_ATIVO}` + 
-                            `?action=validarLoginPainel` + 
-                            `&usuario=${encodeURIComponent(user)}` + 
-                            `&senha=${encodeURIComponent(pass)}` + 
-                            `&uf=${encodeURIComponent(UF_SELECIONADA)}` + 
-                            `&callback=${callbackName}`;
-
-        const scriptTag = document.createElement("script");
-        scriptTag.src = urlCompleta;
-        scriptTag.async = true;
-        
-        scriptTag.onload = function() { 
-            if (scriptTag.parentNode) document.body.removeChild(scriptTag); 
-        };
-        scriptTag.onerror = function() {
-            if (scriptTag.parentNode) document.body.removeChild(scriptTag);
-            if (btn) btn.disabled = false;
-            if (spinner) spinner.style.display = "none";
-            if (btnText) btnText.innerText = "Acessar Painel";
-            alert("❌ Falha de comunicação com o servidor da UF. Verifique sua conexão.");
-        };
-
-        document.body.appendChild(scriptTag);
-    }
-
-        /**
-     * Altera o estado do DOM para exibir o formulário de Cadastro
-     */
-    /**
-     * Altera o estado do DOM para exibir o formulário de Cadastro com estilo roxo unificado
-     */
-    function abrirTelaCadastro(event) {
-        if (event && typeof event.preventDefault === 'function') {
-            event.preventDefault();
-        }
-        
-        console.log("📝 [NAVEGAÇÃO] Transicionando para a tela de Cadastro.");
-        
-        const loginForm = document.getElementById("loginForm");
-        const cadastroForm = document.getElementById("cadastroForm");
-        const tituloCard = document.querySelector(".brand-title");
-        const subTitulo = document.querySelector(".brand-subtitle");
-
-        // 1. Alterna a visibilidade dos formulários no DOM
-        if (loginForm) loginForm.classList.add("hidden");
-        if (cadastroForm) cadastroForm.classList.remove("hidden");
-        
-        // 2. 🌟 ATUALIZAÇÃO CIRÚRGICA DE LAYOUT: Garante fonte roxa corporativa e altera textos
-        if (tituloCard) {
-            tituloCard.innerText = "PAINEL ADMINISTRATIVO";
-            tituloCard.style.color = "#8A05BE"; // Força o Roxo Nu Oficial no cadastro
-        }
-        if (subTitulo) {
-            subTitulo.innerText = "Solicitação de Acesso | VIVO PDC";
-        }
-    }
-
-    /**
-     * Retorna o operador de forma segura para a tela de Login original
-     */
-    function voltarParaLogin(event) {
-        if (event && typeof event.preventDefault === 'function') {
-            event.preventDefault();
-        }
-        
-        console.log("🔄 [NAVEGAÇÃO] Retornando para a tela de Login.");
-        
-        const loginForm = document.getElementById("loginForm");
-        const cadastroForm = document.getElementById("cadastroForm");
-        const tituloCard = document.querySelector(".brand-title");
-        const subTitulo = document.querySelector(".brand-subtitle");
-
-        if (cadastroForm) cadastroForm.classList.add("hidden");
-        if (loginForm) loginForm.classList.remove("hidden");
-        
-        // Retorna os cabeçalhos originais da sua Torre de Controle
-        if (tituloCard) {
-            tituloCard.innerText = "FRONT-PAINEL";
-            tituloCard.style.color = "#8A05BE";
-        }
-        if (subTitulo) {
-            subTitulo.innerText = "Torre de Controle Logística | VIVO PDC";
-        }
-    }
-
-
-    /**
-     * Trata o clique para recuperação de credenciais esquecidas
-     */
-    function solicitarRecuperacaoSenha(event) {
-        if (event && typeof event.preventDefault === 'function') {
-            event.preventDefault();
-        }
-        console.log("🔒 [SUPORTE] Solicitação de recuperação de senha acionada.");
-        alert("ℹ️ Sistema de recuperação: Uma notificação será enviada para a gerência de TI para redefinir seu acesso.");
-    }
-
-    /**
-     * 📝 MOTOR DE CADASTRO: Valida os dados localmente e envia para o servidor via JSONP
-     */
-    /**
-     * MOTOR DE CADASTRO ATUALIZADO COM AS 4 REGRAS CORPORATIVAS
-     */
 // ==================================================================
-// CONFIGURAÇÃO DOS DOMÍNIOS PERMITIDOS (FÁCIL ATUALIZAÇÃO)
+// 1. CONFIGURAÇÃO DE ENDPOINT DIRETO DO BANCO DE DADOS
 // ==================================================================
-    const DOMINIOS_CORPORATIVOS_PERMITIDOS = ["@TELEFONICA", "@ATENTO", "@ACCENTURE"];
+const URL_ENDPOINT_ATIVO = "https://script.google.com/macros/s/AKfycbxHZR2mh1FPerYInd2NX6OL1PYQRgTT972VoyoPJIWb3z6FRyrxLZ9PyAYKpr5DaFY-/exec";
+const DOMINIOS_CORPORATIVOS_PERMITIDOS = ["@TELEFONICA", "@ATENTO", "@ACCENTURE"];
+
+/**
+ * Alterna a interface para a tela de Cadastro de Usuário
+ */
+function abrirTelaCadastro(event) {
+  if (event) event.preventDefault();
+  
+  const loginForm = document.getElementById("loginForm");
+  const cadastroForm = document.getElementById("cadastroForm");
+  
+  if (loginForm) loginForm.style.setProperty("display", "none", "important");
+  if (cadastroForm) cadastroForm.style.setProperty("display", "block", "important");
+  
+  console.log("[NAVEGAÇÃO] Tela de cadastro ativada.");
+}
+
+/**
+ * Alterna a interface de volta para a tela de Login Principal
+ */
+function voltarParaLogin(event) {
+  if (event) event.preventDefault();
+  
+  const loginForm = document.getElementById("loginForm");
+  const cadastroForm = document.getElementById("cadastroForm");
+  
+  if (cadastroForm) cadastroForm.style.setProperty("display", "none", "important");
+  if (loginForm) loginForm.style.setProperty("display", "block", "important");
+  
+  console.log("[NAVEGAÇÃO] Retornou para a tela de login.");
+}
+
+/**
+ * MOTOR DE AUTENTICAÇÃO DO PAINEL (LOGIN)
+ */
+function executarLoginPainel(event) {
+  event.preventDefault(); // Impede o reload da página
+  
+  const email = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+  
+  const btn = document.getElementById("btnLogin");
+  const spinner = document.getElementById("loginSpinner");
+  const btnText = document.getElementById("btnText");
+  
+  if (!email || !pass) {
+    alert("⚠️ Por favor, preencha todos os campos para realizar o login.");
+    return;
+  }
+  
+  // Ativa feedback visual de carregamento
+  if (btn) btn.disabled = true;
+  if (spinner) spinner.style.display = "block";
+  if (btnText) btnText.innerText = "Autenticando...";
+  
+  // Cria o callback global dinâmico para comunicação estável (JSONP)
+  const callbackLoginName = "cbLoginPainel_" + Date.now();
+  
+  window[callbackLoginName] = function(resposta) {
+    // Restaura interface original do botão
+    if (btn) btn.disabled = false;
+    if (spinner) spinner.style.display = "none";
+    if (btnText) btnText.innerText = "Acessar Painel";
     
-    /**
-     * MOTOR DE CADASTRO PAINEL COM VALIDAÇÕES LOCAIS E GERAÇÃO DE OTP
-     */
-    function executarCadastroPainel(event) {
-      event.preventDefault(); // Impede o reload da página
-      
-      // Captura e limpa os inputs do formulário
-      const nomeCompleto = document.getElementById("cadNome").value.trim();
-      const emailInput = document.getElementById("cadUser").value.trim();
-      const pass = document.getElementById("cadPass").value.trim();
-      const passConfirm = document.getElementById("cadPassConfirm").value.trim();
-      const centroLogistico = document.getElementById("cadCentro").value.trim();
-      
-      const btn = document.getElementById("btnCadastrar");
-      const spinner = document.getElementById("cadSpinner");
-      const btnText = document.getElementById("btnCadText");
-      
-      // -----------------------------------------------------------------------
-      // REGRA 1: TODOS OS CAMPOS SÃO MANDATÓRIOS
-      // -----------------------------------------------------------------------
-      if (!nomeCompleto || !emailInput || !pass || !passConfirm || !centroLogistico) {
-        alert("⚠️ Atenção: Todos os campos do formulário são de preenchimento obrigatório.");
+    if (resposta && respuesta.success) {
+      // Regra de Negócio: Se o status for ON, mas o token OTP do cadastro ainda não foi validado
+      if (resposta.exigirOTP) {
+        alert(`🔑 Primeiro Acesso Detectado!\nUm código de verificação foi enviado para o e-mail cadastrado.`);
+        // Aqui você pode abrir seu modal de OTP, ex: abrirModalOtpConf();
         return;
       }
       
-      // -----------------------------------------------------------------------
-      // REGRA 3: MATCH FIELDS PARA PASSWORD (CRITÉRIOS FRONT-CONF/FRONT-OL)
-      // -----------------------------------------------------------------------
-      if (pass !== passConfirm) {
-        alert("❌ Erro de Validação: As senhas informadas não coincidem.");
-        document.getElementById("cadPassConfirm").focus();
-        return;
-      }
-      
-      // Exemplo de critério padrão mantido dos outros fronts (mínimo 4 ou 6 caracteres puramente texto)
-      if (pass.length < 5) {
-        alert("⚠️ A senha corporativa deve conter no mínimo 5 caracteres.");
-        document.getElementById("cadPass").focus();
-        return;
-      }
-      
-      // -----------------------------------------------------------------------
-      // REGRA 2: VALIDAÇÃO DE STRING DE E-MAIL (DOMÍNIOS CORPORATIVOS)
-      // -----------------------------------------------------------------------
-      const emailUpper = emailInput.toUpperCase();
-      const possuiDominioValido = DOMINIOS_CORPORATIVOS_PERMITIDOS.some(dominio => emailUpper.includes(dominio));
-      
-      if (!possuiDominioValido) {
-        alert(`❌ Acesso Negado: O e-mail informado deve pertencer a um dos domínios homologados:\n${DOMINIOS_CORPORATIVOS_PERMITIDOS.join(", ").toLowerCase()}`);
-        document.getElementById("cadUser").focus();
-        return;
-      }
-      
-      // -----------------------------------------------------------------------
-      // REGRA 4: GERAÇÃO DO OTP ALFANUMÉRICO DE 4 DÍGITOS (HERDADO DO FRONT-CONF/OL)
-      // -----------------------------------------------------------------------
-      const caracteresOtp = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let otpGerado = "";
-      for (let i = 0; i < 4; i++) {
-        const indiceAleatorio = Math.floor(Math.random() * caracteresOtp.length);
-        otpGerado += caracteresOtp.charAt(indiceAleatorio);
-      }
-      console.log(`[SEGURANÇA] Chave OTP Temporária de Primeiro Acesso Gerada: ${otpGerado}`);
-      
-      // Ativa estado visual de processamento
-      if (btn) btn.disabled = true;
-      if (spinner) spinner.style.display = "block";
-      if (btnText) btnText.innerText = "Registrando na Doca...";
-      
-      // Nome do callback JSONP dinâmico
-      const callbackCadName = "cbCadastroPainel_" + Date.now();
-      
-      window[callbackCadName] = function(resposta) {
-        // Restaura interface
-        if (btn) btn.disabled = false;
-        if (spinner) spinner.style.display = "none";
-        if (btnText) btnText.innerText = "Solicitar Cadastro";
-        
-        if (resposta && respuesta.success) {
-          alert(`🎉 Usuário cadastrado com sucesso no ecossistema PAINEL PDC!\nChave de Ativação OTP: ${otpGerado}\n\nO token foi enviado para ${emailInput.toLowerCase()} para validação no primeiro acesso.`);
-          document.getElementById("cadastroForm").reset();
-          voltarParaLogin(new Event('click')); // Retorna o operador à tela de autenticação
-        } else {
-          alert("❌ Erro no Servidor:\n" + (resposta.error || "Não foi possível consolidar os dados cadastrais."));
-        }
-        delete window[callbackCadName];
-      };
-      
-      // -----------------------------------------------------------------------
-      // ESTRUTURAÇÃO DO PAYLOAD EXACT MATCH COM A TABELA_6 (PLANILHA)
-      // -----------------------------------------------------------------------
-      const urlCompletaCad = URL_ENDPOINT_ATIVO + 
-        "?action=gravarCadastroDiretoPainel" + 
-        "&lgnUSER=" + encodeURIComponent(emailInput) + 
-        "&lgnPWD=" + encodeURIComponent(pass) + 
-        "&lgnNome=" + encodeURIComponent(nomeCompleto) + 
-        "&lgnRegional=" + encodeURIComponent(centroLogistico) + 
-        "&otp=" + encodeURIComponent(otpGerado) + 
-        "&callback=" + callbackCadName;
-      
-      console.log("-> Transmitindo pacotes para a esteira de destino...");
-      
-      const scriptCadTag = document.createElement("script");
-      scriptCadTag.src = urlCompletaCad;
-      scriptCadTag.async = true;
-      
-      scriptCadTag.onload = function() { 
-        if (scriptCadTag.parentNode) document.body.removeChild(scriptCadTag); 
-      };
-      
-      scriptCadTag.onerror = function() {
-        if (scriptCadTag.parentNode) document.body.removeChild(scriptCadTag);
-        if (btn) btn.disabled = false;
-        if (spinner) spinner.style.display = "none";
-        if (btnText) btnText.innerText = "Solicitar Cadastro";
-        alert("❌ Falha de comunicação de barramento de rede. Verifique seu Deploy do AppsScript.");
-      };
-      
-      document.body.appendChild(scriptCadTag);
+      alert(`🎉 Autenticação realizada com sucesso!\nBem-vindo(a), ${resposta.nome}.`);
+      // Guarda os dados de sessão se necessário
+      localStorage.setItem("user_logado", resposta.email);
+      // Redireciona para o painel principal logado
+      // window.location.href = "dashboard.html";
+    } else {
+      alert("❌ Falha na Autenticação:\n" + (resposta.error || "Usuário ou senha inválidos."));
     }
+    
+    // Deleta a função temporária da memória
+    delete window[callbackLoginName];
+  };
+  
+  // Monta a QueryString apontando para a action de login no banco central
+  const urlCompletaLogin = URL_ENDPOINT_ATIVO + 
+    "?action=validarLoginPainel" + 
+    "&usuario=" + encodeURIComponent(email) + 
+    "&senha=" + encodeURIComponent(pass) + 
+    "&callback=" + callbackLoginName;
+  
+  const scriptLoginTag = document.createElement("script");
+  scriptLoginTag.src = urlCompletaLogin;
+  scriptLoginTag.async = true;
+  
+  scriptLoginTag.onload = function() { 
+    if (scriptLoginTag.parentNode) document.body.removeChild(scriptLoginTag); 
+  };
+  
+  scriptLoginTag.onerror = function() {
+    if (scriptLoginTag.parentNode) document.body.removeChild(scriptLoginTag);
+    if (btn) btn.disabled = false;
+    if (spinner) spinner.style.display = "none";
+    if (btnText) btnText.innerText = "Acessar Painel";
+    alert("❌ Falha crítica de rede ao conectar com o banco de dados mestre.");
+  };
+  
+  document.body.appendChild(scriptLoginTag);
+}
 
-
-
-        /**
-         * 🔒 TRAVA ANTI-F5: Intercepta e impede o recarregamento ou fechamento da página
-         */
-        function bloquearRecarregamentoDoPainel(event) {
-            // Cancela o evento original de fechamento imediato
-            event.preventDefault();
-            
-            // Configuração obrigatória exigida pelos navegadores modernos (Chrome, Safari, Edge)
-            event.returnValue = "As alterações não salvas podem ser perdidas. Deseja realmente sair?";
-            return event.returnValue;
-        }
         
-        /**
-         * Ativa a trava de segurança em todo o navegador
-         */
-        function ligarTravaDeSegurancaF5() {
-            console.log("🛡️ [SEGURANÇA] Trava anti-F5 ativada no navegador.");
-            window.addEventListener('beforeunload', bloquearRecarregamentoDoPainel);
-        }
-        
-        /**
-         * Desliga a trava de segurança (Essencial para permitir redirecionamentos legítimos de sucesso)
-         */
-        function desligarTravaDeSegurancaF5() {
-            console.log("🔓 [SEGURANÇA] Trava anti-F5 desativada.");
-            window.removeEventListener('beforeunload', bloquearRecarregamentoDoPainel);
-        }
-
-
-        
-</script>
+    </script>
 
 </body>
 </html>
