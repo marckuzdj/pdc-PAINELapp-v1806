@@ -348,7 +348,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v4</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v5</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -401,7 +401,7 @@
 
         <div class="form-group">
             <label class="form-label" for="cadPass">Criar Senha</label>
-            <input class="form-input" type="password" id="cadPass" placeholder="Mínimo 6 caracteres" required>
+            <input class="form-input" type="password" id="cadPass" placeholder="Mínimo 8 caracteres" required>
         </div>
 
         <div class="form-group">
@@ -898,7 +898,9 @@ function executarValidacaoOtpServidor() {
         // No callback do OTP de sucesso:
         localStorage.setItem("user_logado", EMAIL_LOGIN_EM_PROCESSO);
         localStorage.setItem("user_nome", resposta.nome);
-        localStorage.setItem("user_regional", resposta.regional || "REGIONAL ATIVA");
+        
+       // localStorage.setItem("user_regional", resposta.regional || "REGIONAL ATIVA");
+        localStorage.setItem("user_regional", resposta.regional || "GERAL");
 
       // Injeta o nome do operador de forma dinâmica e abre o novo modal de sucesso
       const txtModal = document.getElementById("textoBoasVindas");
