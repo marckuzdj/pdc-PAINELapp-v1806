@@ -335,7 +335,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v1</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v2</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -805,11 +805,12 @@ function executarLoginPainel(event) {
         return;
       }
       
-      // Se já estava com status OK, entra direto com a mensagem de boas-vindas
-      alert(`🎉 Bem-vindo de volta, ${resposta.nome}!`);
-      localStorage.setItem("user_logado", resposta.email);
-      window.location.href = "dashboard.html";
-      
+        alert(`🎉 Bem-vindo de volta, ${resposta.nome}!`);
+        localStorage.setItem("user_logado", resposta.email);
+        localStorage.setItem("user_nome", resposta.nome);       // Salva o Nome
+        localStorage.setItem("user_regional", resposta.regional); // Salva a Regional
+        confirmarBoasVindasERedirecionar();
+
     } else {
       alert("❌ Falha na Autenticação:\n" + (resposta.error || "Usuário ou senha inválidos."));
     }
@@ -865,9 +866,11 @@ function executarValidacaoOtpServidor() {
     if (resposta && resposta.success) {
       fecharModalOtpAcesso(); // Fecha o modal anterior de digitação
       
-      // Armazena com segurança o e-mail em localStorage
-      localStorage.setItem("user_logado", EMAIL_LOGIN_EM_PROCESSO);
-      
+        // No callback do OTP de sucesso:
+        localStorage.setItem("user_logado", EMAIL_LOGIN_EM_PROCESSO);
+        localStorage.setItem("user_nome", resposta.nome);
+        localStorage.setItem("user_regional", resposta.regional || "REGIONAL ATIVA");
+
       // Injeta o nome do operador de forma dinâmica e abre o novo modal de sucesso
       const txtModal = document.getElementById("textoBoasVindas");
       if (txtModal) txtModal.innerText = `Seja bem-vindo ao ecossistema PAINEL PDC, ${resposta.nome}.`;
@@ -878,7 +881,8 @@ function executarValidacaoOtpServidor() {
         modalBv.classList.remove("hidden");
       } else {
         // Fallback de segurança se o modal não for localizado no DOM
-        window.location.href = "dashboard.html";
+        //window.location.href = "dashboard.html";
+          confirmarBoasVindasERedirecionar();
       }
     } else {
       alert("❌ Código Inválido:\n" + (resposta.error || "O token informado não confere com o e-mail corporativo."));
@@ -915,13 +919,12 @@ function confirmarBoasVindasERedirecionar() {
  modalBv.classList.add("hidden");
  }
 
- // 2. Recupera a sessão ativa do localStorage para injetar no cabeçalho
- const emailAtivo = localStorage.getItem("user_logado") || "N/A";
- 
- // Como o barramento JSONP devolveu o nome com sucesso na validação anterior,
- // vamos capturá-lo e inferir o vínculo regional coletado diretamente da base mestre.
- document.getElementById("sessaoUserTxt").innerText = emailAtivo.toLowerCase();
- document.getElementById("sessaoRegiaoTxt").innerText = "AGUARDANDO SYNC"; 
+const emailAtivo = localStorage.getItem("user_logado") || "N/A";
+const nomeAtivo = localStorage.getItem("user_nome") || "Operador";
+const regionalAtiva = localStorage.getItem("user_regional") || "GERAL";
+
+document.getElementById("sessaoUserTxt").innerText = nomeAtivo; // Exibe o nome do Marcos
+document.getElementById("sessaoRegiaoTxt").innerText = regionalAtiva; // Exibe o centro logístico (ex: SP/SPW1)
 
  // 3. MODIFICAÇÃO DE LAYOUT: Altera o body de flex-center para bloco expandido
  document.body.style.setProperty("display", "block", "important");
