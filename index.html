@@ -197,6 +197,129 @@
             margin-bottom: 0 !important; /* Mantém zerado para alinhar com o centro do ícone */
         }
 
+
+         /* =========================================================================
+ // 🌟 ESTRUTURA VISUAL DA NOVA TELA: DASHBOARD INTERNA (PAINEL PDC)
+ // ========================================================================= */
+ .dashboard-container {
+ width: 100%;
+ max-width: 1200px;
+ display: none; /* Inicia oculto e nasce dinamicamente no sucesso do login */
+ flex-direction: column;
+ gap: 1.5rem;
+ margin: auto;
+ padding: 1rem;
+ }
+ .dashboard-header-bar {
+ background-color: #FFFFFF;
+ border-left: 6px solid #8A05BE;
+ padding: 1.25rem 2rem;
+ border-radius: 12px;
+ box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ width: 100%;
+ border: 1px solid #E5E5EA;
+ }
+ .user-badge-info {
+ font-size: 1rem;
+ font-weight: 600;
+ color: #222222;
+ }
+ .user-badge-info span {
+ color: #8A05BE;
+ margin-right: 1.5rem;
+ font-weight: 700;
+ }
+ .dashboard-card-filters {
+ background-color: #FFFFFF;
+ border-radius: 16px;
+ padding: 2rem;
+ box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+ border: 1px solid #E5E5EA;
+ width: 100%;
+ }
+ .filter-responsive-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+ gap: 1.5rem;
+ margin-bottom: 1.5rem;
+ }
+ .radio-flex-row {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ gap: 1.5rem;
+ border-top: 1px dashed #D2D2D7;
+ padding-top: 1.5rem;
+ margin-bottom: 1.5rem;
+ }
+ .radio-stack {
+ display: flex;
+ flex-direction: column;
+ gap: 0.75rem;
+ }
+ .radio-custom-label {
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+ font-size: 0.95rem;
+ font-weight: 500;
+ color: #222222;
+ cursor: pointer;
+ }
+ .radio-custom-input {
+ accent-color: #8A05BE;
+ width: 18px;
+ height: 18px;
+ cursor: pointer;
+ }
+ .btn-extractor {
+ background-color: #8A05BE;
+ color: #FFFFFF;
+ border: none;
+ padding: 0.875rem 2.5rem;
+ font-size: 0.95rem;
+ font-weight: 600;
+ border-radius: 8px;
+ cursor: pointer;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ transition: background-color 0.2s ease;
+ }
+ .btn-extractor:hover {
+ background-color: #7604A2;
+ }
+ .monitor-panel-wrapper {
+ margin-top: 1rem;
+ }
+ .monitor-panel-title {
+ font-size: 0.875rem;
+ font-weight: 700;
+ color: #6E6E73;
+ margin-bottom: 0.5rem;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+ .monitor-terminal-output {
+ width: 100%;
+ height: 260px;
+ background-color: #1C1C1E;
+ color: #30D158;
+ font-family: 'SF Mono', Monaco, 'Courier New', Courier, monospace;
+ padding: 1.25rem;
+ border-radius: 8px;
+ border: none;
+ resize: vertical;
+ font-size: 0.875rem;
+ line-height: 1.6;
+ box-shadow: inset 0 2px 12px rgba(0,0,0,0.6);
+ outline: none;
+ }
+
+        
+        
     </style>
 </head>
 <body>
@@ -212,7 +335,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v8</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v1</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -311,7 +434,109 @@
     </form>
         
     </div>
+        <!-- =========================================================================
+        // 🌟 TELA 4: DASHBOARD OPERACIONAL CENTRALIZADA (NASCENDO OCULTA)
+        // ========================================================================= -->
+        <div id="dashboardPrincipalContainer" class="dashboard-container">
+        
+         <!-- BARRA DE SESSÃO DO OPERADOR -->
+         <div class="dashboard-header-bar">
+         <div class="user-badge-info">
+         Usuario: <span id="sessaoUserTxt">Carregando...</span>
+         Regiao: <span id="sessaoRegiaoTxt">Carregando...</span>
+         </div>
+         <div style="font-size: 0.875rem; color: #6E6E73; font-weight: 700; letter-spacing: 0.5px;">PAINEL VIVO PDC</div>
+         </div>
+        
+         <!-- CARD DE MATRIZ DE FILTROS -->
+         <div class="dashboard-card-filters">
+         <form id="formFiltrosDashboard" onsubmit="executarExtracaoRelatorioBase(event)">
+         
+         <div class="filter-responsive-grid">
+         <div class="form-group">
+         <label class="form-label">UF (VIVO - GERAL) - OBRIGATORIO</label>
+         <select id="filtroUF" class="form-select" required>
+         <option value="" disabled selected>Selecione a Região</option>
+         <option value="AL">Alagoas (AL)</option>
+         <option value="BA">Bahia (BA)</option>
+         <option value="CE">Ceará (CE)</option>
+         <option value="ES">Espírito Santo (ES)</option>
+         <option value="MG">Minas Gerais (MG)</option>
+         <option value="PB">Paraíba (PB)</option>
+         <option value="PR">Paraná (PR)</option>
+         <option value="PE">Pernambuco (PE)</option>
+         <option value="PI">Piauí (PI)</option>
+         <option value="RJ">Rio de Janeiro (RJ)</option>
+         <option value="RN">Rio Grande do Norte (RN)</option>
+         <option value="RS">Rio Grande do Sul (RS)</option>
+         <option value="SC">Santa Catarina (SC)</option>
+         <option value="SP">São Paulo (SP)</option>
+         <option value="SE">Sergipe (SE)</option>
+         </select>
+         </div>
+        
+         <div class="form-group">
+         <label class="form-label">TRANSP (VIVO - GERAL)</label>
+         <select id="filtroTransp" class="form-select">
+         <option value="" selected>TODAS</option>
+         </select>
+         </div>
+        
+         <div class="form-group">
+         <label class="form-label">OPERADOR (VIVO - GERAL)</label>
+         <select id="filtroOperador" class="form-select">
+         <option value="" selected>TODOS</option>
+         </select>
+         </div>
+        
+         <div class="form-group">
+         <label class="form-label">FORNS + OV + NF (VIVO - GERAL)</label>
+         <input type="text" id="filtroDocumento" class="form-input" placeholder="Digite a chave de busca...">
+         </div>
+        
+         <div class="form-group">
+         <label class="form-label">DATA INICIAL</label>
+         <input type="date" id="filtroDataInicial" class="form-input">
+         </div>
+        
+         <div class="form-group">
+         <label class="form-label">DATA FINAL</label>
+         <input type="date" id="filtroDataFinal" class="form-input">
+         </div>
+         </div>
+        
+         <!-- RADIOS DE STATUS OPERACIONAIS + BOTÃO EXTRAIR -->
+         <div class="radio-flex-row">
+         <div class="radio-stack">
+         <label class="radio-custom-label">
+         <input type="radio" name="statusFiltro" value="CONCLUIDO" class="radio-custom-input" checked> Concluidos
+         </label>
+         <label class="radio-custom-label">
+         <input type="radio" name="statusFiltro" value="PENDENTE" class="radio-custom-input"> Pendentes
+         </label>
+         <label class="radio-custom-label">
+         <input type="radio" name="statusFiltro" value="PARCIAL" class="radio-custom-input"> Parciais
+         </label>
+         </div>
+        
+         <button type="submit" class="btn-extractor" id="btnExtrairBase">Extrair Base</button>
+         </div>
 
+ </form>
+
+ <!-- INFO PAINEL TERMINAL OUTPUT -->
+ <div class="monitor-panel-wrapper">
+ <div class="monitor-panel-title">INFO PAINEL &gt;</div>
+ <textarea id="terminalMonitor" class="monitor-terminal-output" readonly placeholder="Aguardando inicialização de extração atômica..."></textarea>
+ </div>
+ </div>
+
+</div> <!-- FIM DA TELA DE DASHBOARD -->
+
+
+
+
+    
     <script>
 
 // ==================================================================
@@ -679,15 +904,62 @@ function executarValidacaoOtpServidor() {
 /**
  * Executa o redirecionamento final suave ao clicar no botão do modal de boas-vindas
  */
+/**
+ * Executa a transição suave de telas ocultando o login-card e expandindo a Dashboard no DOM
+ */
 function confirmarBoasVindasERedirecionar() {
-  const modalBv = document.getElementById("modalBoasVindas");
-  if (modalBv) {
-    modalBv.style.setProperty("display", "none", "important");
-    modalBv.classList.add("hidden");
-  }
-  // Executa o redirecionamento para a tela logada principal do seu sistema
-  window.location.href = "dashboard.html";
+ // 1. Oculta de forma definitiva o modal de boas-vindas do topo
+ const modalBv = document.getElementById("modalBoasVindas");
+ if (modalBv) {
+ modalBv.style.setProperty("display", "none", "important");
+ modalBv.classList.add("hidden");
+ }
+
+ // 2. Recupera a sessão ativa do localStorage para injetar no cabeçalho
+ const emailAtivo = localStorage.getItem("user_logado") || "N/A";
+ 
+ // Como o barramento JSONP devolveu o nome com sucesso na validação anterior,
+ // vamos capturá-lo e inferir o vínculo regional coletado diretamente da base mestre.
+ document.getElementById("sessaoUserTxt").innerText = emailAtivo.toLowerCase();
+ document.getElementById("sessaoRegiaoTxt").innerText = "AGUARDANDO SYNC"; 
+
+ // 3. MODIFICAÇÃO DE LAYOUT: Altera o body de flex-center para bloco expandido
+ document.body.style.setProperty("display", "block", "important");
+ document.body.style.setProperty("min-height", "100vh", "important");
+ document.body.style.setProperty("padding", "2rem", "important");
+
+ // 4. OCULTAÇÃO DO CARD DE LOGIN E ATIVAÇÃO DO FORMULÁRIO DE FILTROS DA DOCA
+ const loginCardContainer = document.querySelector(".login-card");
+ const dashboardContainer = document.getElementById("dashboardPrincipalContainer");
+
+ if (loginCardContainer) loginCardContainer.style.setProperty("display", "none", "important");
+ if (dashboardContainer) {
+ dashboardContainer.style.setProperty("display", "flex", "important");
+ console.log("[DASHBOARD] Matriz de filtros e monitor de saída ativados com sucesso.");
+ 
+ // Carimba uma mensagem de inicialização amigável no terminal verde
+ document.getElementById("terminalMonitor").value = `[SESSÃO INICIALIZADA] Operador: ${emailAtivo}\nAmbiente: Produção Mestre\nAguardando parâmetros de busca para disparo de extração na planilha...`;
+ }
 }
+
+/**
+ * MOTOR DE CAPTURA DO FORMULÁRIO DE RELATÓRIOS DA TORRE
+ */
+function executarExtracaoRelatorioBase(event) {
+ event.preventDefault(); // Impede o reload físico da página
+ 
+ const selectedUF = document.getElementById("filtroUF").value;
+ const selectedStatus = document.querySelector('input[name="statusFiltro"]:checked').value;
+ const terminal = document.getElementById("terminalMonitor");
+ 
+ console.log(`[DISPARO] Iniciando extração. Região: ${selectedUF} | Status: ${selectedStatus}`);
+ 
+ // Injeta log interativo no terminal digital verde simulando a esteira operacional
+ terminal.value += `\n\n[${new Date().toLocaleTimeString()}] -> Solicitando pacotes transacionais para a UF: ${selectedUF}...`;
+ terminal.value += `\n[MIGRAÇÃO] -> Filtrando registros com status igual a: ${selectedStatus}...`;
+ terminal.scrollTop = terminal.scrollHeight; // Auto-scroll para acompanhar o processamento
+}
+
 
 
 
