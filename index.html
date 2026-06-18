@@ -350,7 +350,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v7</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v1</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -455,22 +455,28 @@
         <div id="dashboardPrincipalContainer" class="dashboard-container">
         
         <!-- =========================================================================
-        // 🌟 BARRA DE SESSÃO DO OPERADOR (ATUALIZADA COM ALINHAMENTO À DIREITA)
+        // 🌟 BARRA DE SESSÃO DO OPERADOR (EXACT-MATCH COM O SEU LAYOUT DESEJADO)
         // ========================================================================= -->
         <div class="dashboard-header-bar">
-            <div class="user-badge-info">
+            
+            <!-- LINHA 1 (ESQUERDA): Bloco com os dados dinâmicos do operador -->
+            <div class="user-badge-info" style="grid-area: info;">
                 Usuario: <span id="sessaoUserTxt">Carregando...</span>
                 Regiao: <span id="sessaoRegiaoTxt">Carregando...</span>
             </div>
             
-            <!-- Título centralizado no fluxo flexbox -->
-            <div class="dashboard-main-title-tag" style="margin-left: 1.5rem; flex-grow: 1;">PAINEL ADMINISTRATIVO - PASSAGEM DE CARGA</div>
-            
-            <!-- Botão isolado e fixado na ponta extrema direita -->
-            <div>
-                <a href="#" onclick="executarSairDoSistema(event)" style="font-size: 0.85rem; color: #d93025; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; border: 1px solid #d93025; padding: 6px 12px; border-radius: 6px; transition: all 0.2s ease; display: inline-block; white-space: nowrap;" onmouseover="this.style.background='#d93025'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.color='#d93025';">Sair do Sistema</a>
+            <!-- LINHA 1 (DIREITA EXTREMA): Botão Sair isolado no topo superior direito -->
+            <div style="grid-area: botao; text-align: right;">
+                <a href="#" onclick="executarSairDoSistema(event)" style="font-size: 0.85rem; color: #d93025; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; border: 1px solid #d93025; padding: 6px 14px; border-radius: 6px; transition: all 0.2s ease; display: inline-block; white-space: nowrap;" onmouseover="this.style.background='#d93025'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.color='#d93025';">Sair do Sistema</a>
             </div>
+            
+            <!-- LINHA 2: Título posicionado estritamente na parte inferior esquerda -->
+            <div class="dashboard-main-title-tag" style="grid-area: titulo; padding-top: 0.5rem;">
+                PAINEL ADMINISTRATIVO - PASSAGEM DE CARGA
+            </div>
+            
         </div>
+
         
          <!-- CARD DE MATRIZ DE FILTROS -->
          <div class="dashboard-card-filters">
