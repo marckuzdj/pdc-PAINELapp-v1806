@@ -212,7 +212,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v4</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v5</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -391,7 +391,7 @@ function executarCadastroPainel(event) {
   }
 
   // -----------------------------------------------------------------------
-  // REGRA 3: MATCH FIELDS PARA PASSWORD (MÍNIMO 6 CARACTERES)
+  // CRITÉRIOS DE COMPLEXIDADE REQUISITADOS PARA A SENHA CORPORATIVA
   // -----------------------------------------------------------------------
   if (pass !== passConfirm) {
     alert("❌ Erro de Validação: As senhas informadas não coincidem.");
@@ -399,11 +399,23 @@ function executarCadastroPainel(event) {
     return;
   }
 
-  if (pass.length < 6) {
-    alert("⚠️ A senha corporativa deve conter no mínimo 6 caracteres.");
+  // Regex de Segurança Avançada: Valida maiúscula, minúscula, número, caractere especial e tamanho mínimo de 8
+  const regexSenhaForte = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_#^.+-])[A-Za-z\d@$!%*?&_#^.+-]{8,}$/;
+
+  if (!regexSenhaForte.test(pass)) {
+    alert(
+      "❌ Política de Senha Violada!\n\n" +
+      "Sua senha de acesso deve atender obrigatoriamente aos seguintes critérios:\n" +
+      "• Conter no mínimo 8 caracteres\n" +
+      "• Conter pelo menos uma letra MAIÚSCULA\n" +
+      "• Conter pelo menos uma letra minúscula\n" +
+      "• Conter pelo menos um número\n" +
+      "• Conter pelo menos um caractere especial (@, #, $, %, &, *, !, _, -, .)"
+    );
     elPass.focus();
     return;
   }
+
 
   // -----------------------------------------------------------------------
   // REGRA 2: VALIDAÇÃO DE DOMÍNIOS CORPORATIVOS
@@ -468,7 +480,7 @@ function executarCadastroPainel(event) {
         voltarParaLogin(new Event('click'));
       }
     } else {
-      alert("❌ Rejeição do Servidor:\n" + (resposta.error || "Não foi possível consolidar os dados cadastrais."));
+      alert("❌ Não permitido:\n" + (resposta.error || "Não foi possível consolidar os dados cadastrais."));
     }
     delete window[callbackCadName];
   };
