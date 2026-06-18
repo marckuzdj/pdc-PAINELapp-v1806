@@ -212,7 +212,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v7</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v8</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -638,10 +638,23 @@ function executarValidacaoOtpServidor() {
     if (btnText) btnText.innerText = "Verificar Código";
 
     if (resposta && resposta.success) {
-      fecharModalOtpAcesso();
-      alert(`🎉 Ativação Concluída!\nSeja bem-vindo ao ecossistema PAINEL PDC, ${resposta.nome}.`);
+      fecharModalOtpAcesso(); // Fecha o modal anterior de digitação
+      
+      // Armazena com segurança o e-mail em localStorage
       localStorage.setItem("user_logado", EMAIL_LOGIN_EM_PROCESSO);
-      window.location.href = "dashboard.html"; // Vai para a tela principal logada
+      
+      // Injeta o nome do operador de forma dinâmica e abre o novo modal de sucesso
+      const txtModal = document.getElementById("textoBoasVindas");
+      if (txtModal) txtModal.innerText = `Seja bem-vindo ao ecossistema PAINEL PDC, ${resposta.nome}.`;
+      
+      const modalBv = document.getElementById("modalBoasVindas");
+      if (modalBv) {
+        modalBv.style.setProperty("display", "flex", "important");
+        modalBv.classList.remove("hidden");
+      } else {
+        // Fallback de segurança se o modal não for localizado no DOM
+        window.location.href = "dashboard.html";
+      }
     } else {
       alert("❌ Código Inválido:\n" + (resposta.error || "O token informado não confere com o e-mail corporativo."));
       document.getElementById("inputOtpValidador").value = "";
@@ -650,7 +663,6 @@ function executarValidacaoOtpServidor() {
     delete window[callbackOtpName];
   };
 
-  // Envia a action avançada para confrontar o OTP e atualizar a linha na planilha com o sufixo " - OK"
   const urlCompletaOtp = URL_ENDPOINT_ATIVO + 
     "?action=confirmarPrimeiroAcessoOtp" + 
     "&usuario=" + encodeURIComponent(EMAIL_LOGIN_EM_PROCESSO) + 
@@ -663,6 +675,20 @@ function executarValidacaoOtpServidor() {
   scriptOtpTag.onload = function() { if (scriptOtpTag.parentNode) document.body.removeChild(scriptOtpTag); };
   document.body.appendChild(scriptOtpTag);
 }
+
+/**
+ * Executa o redirecionamento final suave ao clicar no botão do modal de boas-vindas
+ */
+function confirmarBoasVindasERedirecionar() {
+  const modalBv = document.getElementById("modalBoasVindas");
+  if (modalBv) {
+    modalBv.style.setProperty("display", "none", "important");
+    modalBv.classList.add("hidden");
+  }
+  // Executa o redirecionamento para a tela logada principal do seu sistema
+  window.location.href = "dashboard.html";
+}
+
 
 
 function fecharModalOtpAcesso() {
@@ -712,6 +738,22 @@ function fecharModalOtpAcesso() {
             <span id="btnTextOtp">Verificar Código</span>
         </button>
         <button onclick="fecharModalOtpAcesso()" class="helper-link" style="background: none; border: none; cursor: pointer; color: #666666; font-size: 13px;">Cancelar</button>
+    </div>
+</div>
+
+<!-- =========================================================================
+// 🌟 MODAL DE BOAS-VINDAS PÓS-LOGIN (CUSTOMIZADO)
+// ========================================================================= -->
+<div id="modalBoasVindas" class="modal-container hidden" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin: auto;">
+        <div style="font-size: 48px; color: #800080; margin-bottom: 15px;">🚀</div>
+        <h3 style="margin-bottom: 10px; color: #333333; font-family: sans-serif; font-weight: 600;">Ativação Concluída!</h3>
+        <p id="textoBoasVindas" style="color: #666666; font-size: 15px; line-height: 1.5; margin-bottom: 25px; font-family: sans-serif;">
+            Seja bem-vindo ao ecossistema PAINEL PDC.
+        </p>
+        <button onclick="confirmarBoasVindasERedirecionar()" class="btn-submit" style="width: 100%; padding: 12px; background: #800080; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+            <span>Acessar Dashboard</span>
+        </button>
     </div>
 </div>
 
