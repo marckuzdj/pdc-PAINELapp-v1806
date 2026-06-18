@@ -348,7 +348,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v3</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v4</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -802,34 +802,46 @@ function executarLoginPainel(event) {
   
   const callbackLoginName = "cbLoginPainel_" + Date.now();
   
+  // Dentro da sua função executarLoginPainel, substitua a verificação do callback por este bloco:
   window[callbackLoginName] = function(resposta) {
     if (btn) btn.disabled = false;
     if (spinner) spinner.style.display = "none";
     if (btnText) btnText.innerText = "Acessar Painel";
     
-    if (resposta && resposta.success) {
-      // REGRA: Se o back-end detectou primeiro acesso (coluna OTP não é "OK")
-      if (resposta.exigirOTP) {
-        EMAIL_LOGIN_EM_PROCESSO = resposta.email; // Salva o e-mail em memória
-        
-        // Abre o modal de digitação do OTP
-        const modal = document.getElementById("modalOtpAcesso");
-        if (modal) {
-          modal.style.setProperty("display", "flex", "important");
-          modal.classList.remove("hidden");
-          document.getElementById("inputOtpValidador").focus();
+    if (resposta) {
+      // 🌟 INTERVENÇÃO: Intercepta se a conta foi deletada por expiração no servidor
+      if (resposta.contaExpirada) {
+        const modalExp = document.getElementById("modalContaExpirada");
+        if (modalExp) {
+          modalExp.style.setProperty("display", "flex", "important");
+          modalExp.classList.remove("hidden");
+        } else {
+          alert("Seus dados de acesso expiraram! Realize um novo cadastro.");
+          abrirTelaCadastro(new Event('click'));
         }
         return;
       }
-      
+
+      if (resposta.success) {
+        if (resposta.exigirOTP) {
+          EMAIL_LOGIN_EM_PROCESSO = resposta.email;
+          const modal = document.getElementById("modalOtpAcesso");
+          if (modal) {
+            modal.style.setProperty("display", "flex", "important");
+            modal.classList.remove("hidden");
+            document.getElementById("inputOtpValidador").focus();
+          }
+          return;
+        }
+        
         alert(`🎉 Bem-vindo de volta, ${resposta.nome}!`);
         localStorage.setItem("user_logado", resposta.email);
-        localStorage.setItem("user_nome", resposta.nome);       // Salva o Nome
-        localStorage.setItem("user_regional", resposta.regional); // Salva a Regional
+        localStorage.setItem("user_nome", resposta.nome);
+        localStorage.setItem("user_regional", resposta.regional);
         confirmarBoasVindasERedirecionar();
-
-    } else {
-      alert("❌ Falha na Autenticação:\n" + (resposta.error || "Usuário ou senha inválidos."));
+      } else {
+        alert("❌ Falha na Autenticação:\n" + (resposta.error || "Usuário ou senha inválidos."));
+      }
     }
     delete window[callbackLoginName];
   };
@@ -980,7 +992,17 @@ function executarExtracaoRelatorioBase(event) {
  terminal.scrollTop = terminal.scrollHeight; // Auto-scroll para acompanhar o processamento
 }
 
-
+/**
+ * Fecha o modal de expiração e joga o operador direto na aba de novo cadastro
+ */
+function fecharModalExpiradoEIrParaCadastro() {
+  const modalExp = document.getElementById("modalContaExpirada");
+  if (modalExp) {
+    modalExp.style.setProperty("display", "none", "important");
+    modalExp.classList.add("hidden");
+  }
+  abrirTelaCadastro(new Event('click')); // Transiciona para a tela de registro
+}
 
 
 function fecharModalOtpAcesso() {
@@ -1045,6 +1067,22 @@ function fecharModalOtpAcesso() {
         </p>
         <button onclick="confirmarBoasVindasERedirecionar()" class="btn-submit" style="width: 100%; padding: 12px; background: #800080; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
             <span>Acessar Dashboard</span>
+        </button>
+    </div>
+</div>
+
+    <!-- =========================================================================
+// ⏳ MODAL DE ALERTA DE CONTA EXPIRADA (7 DIAS SEM LOGAR)
+// ========================================================================= -->
+<div id="modalContaExpirada" class="modal-container hidden" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin: auto;">
+        <div style="font-size: 48px; color: #d93025; margin-bottom: 15px;">⏳</div>
+        <h3 style="margin-bottom: 10px; color: #333333; font-family: sans-serif; font-weight: 600;">Acesso Expirado</h3>
+        <p style="color: #666666; font-size: 15px; line-height: 1.5; margin-bottom: 25px; font-family: sans-serif;">
+            Seus dados de acesso expiraram! Realize um novo cadastro.
+        </p>
+        <button onclick="fecharModalExpiradoEIrParaCadastro()" class="btn-submit" style="width: 100%; padding: 12px; background: #800080; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+            <span>Cadastrar Nova Conta</span>
         </button>
     </div>
 </div>
