@@ -256,7 +256,9 @@
         <!-- =========================================================================
         // 👇 TELA 3 ATUALIZADA: FORMULÁRIO DE CADASTRO COM FILIAIS DE CENTRO
         // ========================================================================= -->
-        <form id="cadastroForm" onsubmit="executarCadastroPainel(event)">
+            <!-- FORCE O FORMULÁRIO DE CADASTRO A NASCER OCULTO -->
+            <form id="cadastroForm" style="display: none !important;" onsubmit="executarCadastroPainel(event)">
+
             <div class="form-group">
                 <label class="form-label" for="cadNome">Nome Completo</label>
                 <input class="form-input" type="text" id="cadNome" placeholder="Seu nome completo" required>
