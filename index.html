@@ -211,6 +211,7 @@
  padding: 1rem;
  }
 /* Procure por esta classe e garanta que ela tenha flex-wrap para telas menores */
+/* Garanta que sua classe CSS esteja parametrizada exatamente assim */
 .dashboard-header-bar {
     background-color: #FFFFFF;
     border-left: 6px solid #8A05BE;
@@ -218,13 +219,14 @@
     border-radius: 12px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* 🎯 Injeção Cirúrgica: Empurra os blocos para as extremidades */
     align-items: center;
     width: 100%;
     border: 1px solid #E5E5EA;
-    flex-wrap: wrap; /* Evita quebra de layout em telas de notebooks */
+    flex-wrap: wrap;
     gap: 1rem;
 }
+
 
 /* Nova regra cirúrgica para estilizar o título da direita */
 .dashboard-main-title-tag {
@@ -348,7 +350,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v6</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v7</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -453,7 +455,7 @@
         <div id="dashboardPrincipalContainer" class="dashboard-container">
         
         <!-- =========================================================================
-        // 🌟 BARRA DE SESSÃO DO OPERADOR (ATUALIZADA COM LINK SAIR)
+        // 🌟 BARRA DE SESSÃO DO OPERADOR (ATUALIZADA COM ALINHAMENTO À DIREITA)
         // ========================================================================= -->
         <div class="dashboard-header-bar">
             <div class="user-badge-info">
@@ -461,10 +463,12 @@
                 Regiao: <span id="sessaoRegiaoTxt">Carregando...</span>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div class="dashboard-main-title-tag">PAINEL ADMINISTRATIVO - PASSAGEM DE CARGA</div>
-                <!-- Injeção Cirúrgica do Link de Logoff com estilo corporativo -->
-                <a href="#" onclick="executarSairDoSistema(event)" style="font-size: 0.85rem; color: #d93025; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; border: 1px solid #d93025; padding: 6px 12px; border-radius: 6px; transition: all 0.2s ease;" onmouseover="this.style.background='#d93025'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.color='#d93025';">Sair do Sistema</a>
+            <!-- Título centralizado no fluxo flexbox -->
+            <div class="dashboard-main-title-tag" style="margin-left: 1.5rem; flex-grow: 1;">PAINEL ADMINISTRATIVO - PASSAGEM DE CARGA</div>
+            
+            <!-- Botão isolado e fixado na ponta extrema direita -->
+            <div>
+                <a href="#" onclick="executarSairDoSistema(event)" style="font-size: 0.85rem; color: #d93025; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; border: 1px solid #d93025; padding: 6px 12px; border-radius: 6px; transition: all 0.2s ease; display: inline-block; white-space: nowrap;" onmouseover="this.style.background='#d93025'; this.style.color='#ffffff';" onmouseout="this.style.background='transparent'; this.style.color='#d93025';">Sair do Sistema</a>
             </div>
         </div>
         
