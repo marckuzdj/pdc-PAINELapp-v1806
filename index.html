@@ -212,7 +212,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v5</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v6</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -424,7 +424,7 @@ function executarCadastroPainel(event) {
   const possuiDominioValido = DOMINIOS_CORPORATIVOS_PERMITIDOS.some(dominio => emailUpper.includes(dominio));
 
   if (!possuiDominioValido) {
-    alert(`❌ Acesso Negado: O e-mail informado deve pertencer a um dos domínios homologados:\n${DOMINIOS_CORPORATIVOS_PERMITIDOS.join(", ").toLowerCase()}`);
+    alert(`❌ Acesso Negado: O e-mail informado deve pertencer a um domínio homologado`);
     elUser.focus();
     return;
   }
@@ -533,6 +533,141 @@ function fecharModalSucessoCadastro() {
   }
 }
 
+        // Variável temporária em memória RAM apenas para persistir o e-mail durante o fluxo do OTP
+let EMAIL_LOGIN_EM_PROCESSO = "";
+
+/**
+ * MOTOR DE AUTENTICAÇÃO DO PAINEL (LOGIN PRINCIPAL)
+ */
+function executarLoginPainel(event) {
+  event.preventDefault();
+  
+  const email = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+  
+  const btn = document.getElementById("btnLogin");
+  const spinner = document.getElementById("loginSpinner");
+  const btnText = document.getElementById("btnText");
+  
+  if (!email || !pass) {
+    alert("⚠️ Por favor, preencha todos os campos para realizar o login.");
+    return;
+  }
+  
+  if (btn) btn.disabled = true;
+  if (spinner) spinner.style.display = "block";
+  if (btnText) btnText.innerText = "Autenticando...";
+  
+  const callbackLoginName = "cbLoginPainel_" + Date.now();
+  
+  window[callbackLoginName] = function(resposta) {
+    if (btn) btn.disabled = false;
+    if (spinner) spinner.style.display = "none";
+    if (btnText) btnText.innerText = "Acessar Painel";
+    
+    if (resposta && resposta.success) {
+      // REGRA: Se o back-end detectou primeiro acesso (coluna OTP não é "OK")
+      if (resposta.exigirOTP) {
+        EMAIL_LOGIN_EM_PROCESSO = resposta.email; // Salva o e-mail em memória
+        
+        // Abre o modal de digitação do OTP
+        const modal = document.getElementById("modalOtpAcesso");
+        if (modal) {
+          modal.style.setProperty("display", "flex", "important");
+          modal.classList.remove("hidden");
+          document.getElementById("inputOtpValidador").focus();
+        }
+        return;
+      }
+      
+      // Se já estava com status OK, entra direto com a mensagem de boas-vindas
+      alert(`🎉 Bem-vindo de volta, ${resposta.nome}!`);
+      localStorage.setItem("user_logado", resposta.email);
+      window.location.href = "dashboard.html";
+      
+    } else {
+      alert("❌ Falha na Autenticação:\n" + (resposta.error || "Usuário ou senha inválidos."));
+    }
+    delete window[callbackLoginName];
+  };
+  
+  const urlCompletaLogin = URL_ENDPOINT_ATIVO + 
+    "?action=validarLoginPainel" + 
+    "&usuario=" + encodeURIComponent(email) + 
+    "&senha=" + encodeURIComponent(pass) + 
+    "&callback=" + callbackLoginName;
+  
+  const scriptLoginTag = document.createElement("script");
+  scriptLoginTag.src = urlCompletaLogin;
+  scriptLoginTag.async = true;
+  scriptLoginTag.onload = function() { if (scriptLoginTag.parentNode) document.body.removeChild(scriptLoginTag); };
+  scriptLoginTag.onerror = function() {
+    if (scriptLoginTag.parentNode) document.body.removeChild(scriptLoginTag);
+    if (btn) btn.disabled = false;
+    if (spinner) spinner.style.display = "none";
+    if (btnText) btnText.innerText = "Acessar Painel";
+    alert("❌ Falha crítica de rede ao conectar com o banco de dados mestre.");
+  };
+  document.body.appendChild(scriptLoginTag);
+}
+
+/**
+ * ENVIA O CÓDIGO OTP DIGITADO PELO USUÁRIO PARA VALIDAÇÃO NO SERVIDOR
+ */
+function ejecutarValidacaoOtpServidor() {
+  const otpDigitado = document.getElementById("inputOtpValidador").value.trim().toUpperCase();
+  const btn = document.getElementById("btnConfirmarOtp");
+  const btnText = document.getElementById("btnTextOtp");
+
+  if (otpDigitado.length < 4) {
+    alert("⚠️ O código deve conter exatamente 4 dígitos alfanuméricos.");
+    return;
+  }
+
+  if (btn) btn.disabled = true;
+  if (btnText) btnText.innerText = "Validando token...";
+
+  const callbackOtpName = "cbValidarOtp_" + Date.now();
+
+  window[callbackOtpName] = function(resposta) {
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.innerText = "Verificar Código";
+
+    if (resposta && resposta.success) {
+      fecharModalOtpAcesso();
+      alert(`🎉 Ativação Concluída!\nSeja bem-vindo ao ecossistema PAINEL PDC, ${resposta.nome}.`);
+      localStorage.setItem("user_logado", EMAIL_LOGIN_EM_PROCESSO);
+      window.location.href = "dashboard.html"; // Vai para a tela principal
+    } else {
+      alert("❌ Código Inválido:\n" + (resposta.error || "O token informado não confere com o e-mail corporativo."));
+      document.getElementById("inputOtpValidador").value = "";
+      document.getElementById("inputOtpValidador").focus();
+    }
+    delete window[callbackOtpName];
+  };
+
+  // Envia a action avançada para confrontar o OTP e atualizar a linha na planilha
+  const urlCompletaOtp = URL_ENDPOINT_ATIVO + 
+    "?action=confirmarPrimeiroAcessoOtp" + 
+    "&usuario=" + encodeURIComponent(EMAIL_LOGIN_EM_PROCESSO) + 
+    "&otp=" + encodeURIComponent(otpDigitado) + 
+    "&callback=" + callbackOtpName;
+
+  const scriptOtpTag = document.createElement("script");
+  scriptOtpTag.src = urlCompletaOtp;
+  scriptOtpTag.async = true;
+  scriptOtpTag.onload = function() { if (scriptOtpTag.parentNode) document.body.removeChild(scriptOtpTag); };
+  document.body.appendChild(scriptOtpTag);
+}
+
+function fecharModalOtpAcesso() {
+  const modal = document.getElementById("modalOtpAcesso");
+  if (modal) {
+    modal.style.setProperty("display", "none", "important");
+    modal.classList.add("hidden");
+  }
+}
+
         
     </script>
 
@@ -549,6 +684,29 @@ function fecharModalSucessoCadastro() {
         <button onclick="fecharModalSucessoCadastro()" class="btn-submit" style="width: 100%; padding: 12px; background: #800080; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
             <span>Entendi</span>
         </button>
+    </div>
+</div>
+
+<!-- =========================================================================
+// 🔑 MODAL DE VALIDAÇÃO DE PRIMEIRO ACESSO (OTP)
+// ========================================================================= -->
+<div id="modalOtpAcesso" class="modal-container hidden" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin: auto;">
+        <div style="font-size: 40px; color: #800080; margin-bottom: 15px;">🔒</div>
+        <h3 style="margin-bottom: 10px; color: #333333; font-family: sans-serif; font-weight: 600;">Primeiro Acesso Detectado</h3>
+        <p style="color: #666666; font-size: 14px; line-height: 1.4; margin-bottom: 20px; font-family: sans-serif;">
+            Insira o código de ativação alfanumérico de 4 dígitos que enviamos para o seu e-mail corporativo.
+        </p>
+        
+        <!-- Campo para digitação do código -->
+        <div class="form-group" style="margin-bottom: 20px;">
+            <input class="form-input" type="text" id="inputOtpValidador" maxlength="4" placeholder="Ex: UR0H" style="text-align: center; font-size: 22px; letter-spacing: 6px; font-weight: bold; text-transform: uppercase;" required>
+        </div>
+
+        <button onclick="executarValidacaoOtpServidor()" id="btnConfirmarOtp" class="btn-submit" style="width: 100%; padding: 12px; background: #800080; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">
+            <span id="btnTextOtp">Verificar Código</span>
+        </button>
+        <button onclick="fecharModalOtpAcesso()" class="helper-link" style="background: none; border: none; cursor: pointer; color: #666666; font-size: 13px;">Cancelar</button>
     </div>
 </div>
 
