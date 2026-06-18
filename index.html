@@ -212,7 +212,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v6</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v7</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -614,7 +614,11 @@ function executarLoginPainel(event) {
 /**
  * ENVIA O CÓDIGO OTP DIGITADO PELO USUÁRIO PARA VALIDAÇÃO NO SERVIDOR
  */
-function ejecutarValidacaoOtpServidor() {
+/**
+ * ENVIA O CÓDIGO OTP DIGITADO PELO USUÁRIO PARA VALIDAÇÃO NO SERVIDOR
+ * CORREÇÃO CIRÚRGICA: Trocado "ejecutar" com J para "executar" com C
+ */
+function executarValidacaoOtpServidor() {
   const otpDigitado = document.getElementById("inputOtpValidador").value.trim().toUpperCase();
   const btn = document.getElementById("btnConfirmarOtp");
   const btnText = document.getElementById("btnTextOtp");
@@ -637,7 +641,7 @@ function ejecutarValidacaoOtpServidor() {
       fecharModalOtpAcesso();
       alert(`🎉 Ativação Concluída!\nSeja bem-vindo ao ecossistema PAINEL PDC, ${resposta.nome}.`);
       localStorage.setItem("user_logado", EMAIL_LOGIN_EM_PROCESSO);
-      window.location.href = "dashboard.html"; // Vai para a tela principal
+      window.location.href = "dashboard.html"; // Vai para a tela principal logada
     } else {
       alert("❌ Código Inválido:\n" + (resposta.error || "O token informado não confere com o e-mail corporativo."));
       document.getElementById("inputOtpValidador").value = "";
@@ -646,7 +650,7 @@ function ejecutarValidacaoOtpServidor() {
     delete window[callbackOtpName];
   };
 
-  // Envia a action avançada para confrontar o OTP e atualizar a linha na planilha
+  // Envia a action avançada para confrontar o OTP e atualizar a linha na planilha com o sufixo " - OK"
   const urlCompletaOtp = URL_ENDPOINT_ATIVO + 
     "?action=confirmarPrimeiroAcessoOtp" + 
     "&usuario=" + encodeURIComponent(EMAIL_LOGIN_EM_PROCESSO) + 
@@ -659,6 +663,7 @@ function ejecutarValidacaoOtpServidor() {
   scriptOtpTag.onload = function() { if (scriptOtpTag.parentNode) document.body.removeChild(scriptOtpTag); };
   document.body.appendChild(scriptOtpTag);
 }
+
 
 function fecharModalOtpAcesso() {
   const modal = document.getElementById("modalOtpAcesso");
