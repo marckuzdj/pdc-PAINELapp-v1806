@@ -212,7 +212,7 @@
             <img class="brand-icon" src="" alt="Logo">
             <h1 class="brand-title">PASSAGEM DE CARGA</h1>
         </div>
-        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v3</p>
+        <p class="brand-subtitle">PAINEL ADMINISTRATIVO v4</p>
     </div>
 
     <!-- ========================================================================= -->
@@ -438,27 +438,41 @@ function executarCadastroPainel(event) {
   if (spinner) spinner.style.display = "block";
   if (btnText) btnText.innerText = "Registrando na Doca...";
 
-  // Injeção estável da tag Script (JSONP) direcionada ao banco central
+  // Cria o callback global JSONP corrigido
   const callbackCadName = "cbCadastroPainel_" + Date.now();
 
-  // Procura por esta linha no seu script:
-  window[callbackCadName] = function(resposta) { // <- Garanta que termina com "o"
-    // Restaura o estado original da tela e botões
+  window[callbackCadName] = function(resposta) {
+    // Restaura o estado original dos botões da tela
     if (btn) btn.disabled = false;
     if (spinner) spinner.style.display = "none";
     if (btnText) btnText.innerText = "Solicitar Cadastro";
 
-    // AJUSTE AQUI: Modificado de "resposta" para "resposta" em todos os pontos
     if (resposta && resposta.success) {
-      alert(`🎉 Usuário cadastrado com sucesso no ecossistema PAINEL PDC!\nChave de Ativação OTP: ${otpGerado}\n\nO token de segurança foi enviado para o e-mail informado.`);
+      // 1. Limpa o formulário de cadastro físico
       const formFisico = document.getElementById("cadastroForm");
       if (formFisico) formFisico.reset();
-      voltarParaLogin(new Event('click')); // Retorna o operador para a tela de Login
+      
+      // 2. Aciona a exibição do Modal Customizado na tela
+      const modal = document.getElementById("modalSucessoCadastro");
+      if (modal) {
+        modal.style.setProperty("display", "flex", "important");
+        modal.classList.remove("hidden");
+        // Efeito suave de subida no conteúdo interno
+        setTimeout(() => {
+          const content = modal.querySelector(".modal-content");
+          if (content) content.style.transform = "translateY(0)";
+        }, 50);
+      } else {
+        // Fallback de segurança caso o ID do modal não seja localizado no DOM
+        alert("Usuário cadastrado com sucesso. Sua chave de ativação foi enviada ao e-mail informado. Use-a no primeiro acesso!");
+        voltarParaLogin(new Event('click'));
+      }
     } else {
       alert("❌ Rejeição do Servidor:\n" + (resposta.error || "Não foi possível consolidar os dados cadastrais."));
     }
     delete window[callbackCadName];
   };
+
 
   // Montagem transparente do link de rede apontando para a action do banco mestre
   const urlCompletaCad = URL_ENDPOINT_ATIVO + 
@@ -489,9 +503,43 @@ function executarCadastroPainel(event) {
   document.body.appendChild(scriptCadTag);
 }
 
+/**
+ * Fecha o modal de sucesso e redireciona o fluxo para a tela de login principal
+ */
+function fecharModalSucessoCadastro() {
+  const modal = document.getElementById("modalSucessoCadastro");
+  if (modal) {
+    const content = modal.querySelector(".modal-content");
+    if (content) content.style.transform = "translateY(100%)";
+    
+    setTimeout(() => {
+      modal.style.setProperty("display", "none", "important");
+      modal.classList.add("hidden");
+      // Retorna o operador para a tela de Login automaticamente
+      voltarParaLogin(new Event('click'));
+    }, 200);
+  }
+}
 
         
     </script>
 
+<!-- =========================================================================
+// 🌟 MODAL DE SUCESSO DO CADASTRO (CUSTOMIZADO)
+// ========================================================================= -->
+<div id="modalSucessoCadastro" class="modal-container hidden" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin: auto; transform: translateY(100%); transition: transform 0.3s ease;">
+        <div style="font-size: 48px; color: #800080; margin-bottom: 15px;">🎉</div>
+        <h3 style="margin-bottom: 15px; color: #333333; font-family: sans-serif; font-weight: 600;">Cadastro Concluído!</h3>
+        <p style="color: #666666; font-size: 15px; line-height: 1.5; margin-bottom: 25px; font-family: sans-serif;">
+            Usuário cadastrado com sucesso. Sua chave de ativação foi enviada ao e-mail informado. Use-a no primeiro acesso!
+        </p>
+        <button onclick="fecharModalSucessoCadastro()" class="btn-submit" style="width: 100%; padding: 12px; background: #800080; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+            <span>Entendi</span>
+        </button>
+    </div>
+</div>
+
+    
 </body>
 </html>
